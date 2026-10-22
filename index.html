@@ -2,73 +2,490 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#176b52">
 <title>InnerIQ | Your Wellbeing Companion</title>
 <style>
-:root{--green:#176b52;--green-dark:#10513e;--bg:#f3f7f5;--ink:#263b35;--line:#e1ebe5}
+:root{--bg:#f5f8f6;--card:#fff;--ink:#10241e;--mute:#4f6860;--line:#dce5e0;--brand:#0d6b52;--brand-d:#095340;--tint:#e8f3ee;--amber:#d99a14;--amber-bg:#fdf3dc;--amber-ink:#7d5200;--care:#b3372e;--care-bg:#fbe9e6;--r:14px;
+--sh:0 1px 2px rgba(16,36,30,.06),0 4px 14px rgba(16,36,30,.05);--sh-h:0 2px 4px rgba(16,36,30,.08),0 10px 26px rgba(16,36,30,.10)}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
-header{background:var(--green);color:#fff;text-align:center;padding:25px 16px}
-header h1{margin:0;font-size:32px;letter-spacing:1px}header p{margin:6px 0 0}
-.language-box{text-align:center;padding:16px}
-select,input{width:100%;padding:12px;margin-top:6px;border:1px solid #c8d7d0;border-radius:8px;font-size:16px;background:#fff;color:var(--ink)}
-.language-box select{max-width:250px}
-main{max-width:760px;margin:auto;padding:0 14px 24px}
-.card{background:#fff;border-radius:15px;padding:20px;margin:16px 0;box-shadow:0 4px 14px #0000000b}
-h2{color:var(--green);margin:0 0 8px;font-size:22px}
-.question{padding:14px 0;border-bottom:1px solid var(--line)}
-.question:last-child{border-bottom:0}.question p{font-weight:bold;margin:0 0 8px}
-.option{display:inline-flex;align-items:center;margin:5px 12px 5px 0;gap:6px;font-size:14px}
-.option input,.task input{width:auto;margin:0;accent-color:var(--green)}
-.task{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
-.task input{margin-top:6px;transform:scale(1.15)}.task label{flex:1}
-button,.button{display:block;width:100%;padding:13px;background:var(--green);color:#fff;border:0;border-radius:9px;font-size:16px;font-weight:bold;cursor:pointer;text-align:center;text-decoration:none;margin-top:12px}
-button:hover{background:var(--green-dark)}button.secondary{background:#e6efea;color:var(--green-dark)}
-.note{font-size:13px;color:#5d7068}.result{background:#eaf6ef;padding:14px;border-radius:10px;margin-top:14px;white-space:pre-line}
-footer{text-align:center;padding:22px 15px;background:#e4eee8;color:#435a50;font-size:13px}
+html{-webkit-text-size-adjust:100%;color-scheme:light;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:radial-gradient(1000px 520px at 50% -140px,#e0f1e8,transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI","Noto Sans","Noto Sans Devanagari","Noto Sans Telugu",sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased;overflow-wrap:break-word;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);-webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);box-shadow:0 1px 8px rgba(16,36,30,.04);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+.top-in{max-width:608px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:34px;font-weight:800;letter-spacing:-.035em;line-height:1.1;color:var(--ink)}
+.brand b{color:var(--brand);font-weight:800}
+.langs{position:relative;display:flex;background:var(--tint);border-radius:99px;padding:3px}
+.langs .thumb{position:absolute;top:3px;bottom:3px;left:0;width:0;border-radius:99px;background:var(--brand);box-shadow:0 1px 3px rgba(13,107,82,.3);transition:transform .28s cubic-bezier(.22,.8,.3,1),width .28s cubic-bezier(.22,.8,.3,1)}
+.langs button{position:relative;z-index:1;border:0;background:none;padding:6px 13px;border-radius:99px;font-size:14px;font-weight:600;cursor:pointer;color:var(--mute);transition:color .2s}
+.langs button:hover{color:var(--brand-d)}
+.langs button[aria-pressed=true],.langs button[aria-pressed=true]:hover{color:#fff}
+.noanim,.noanim *{transition:none!important}
+main{flex:1;width:100%;max-width:640px;margin:0 auto;padding:28px 16px;display:flex;flex-direction:column;justify-content:center}
+main>section{width:100%}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:16px;box-shadow:var(--sh);transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--sh-h)}
+h1,h2,h3{margin:0 0 8px;color:var(--ink)}
+h1{font-size:clamp(26px,6vw,32px);font-weight:750;line-height:1.2;letter-spacing:-.02em}
+h2{font-size:22px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+h3{font-size:17px;font-weight:650;line-height:1.35}
+p{margin:0 0 12px}
+.mute{color:var(--mute);font-size:14.5px}
+.lead{font-size:17px;color:var(--mute);max-width:52ch}
+.section{font-size:15px;font-weight:650;color:var(--mute);margin:26px 2px 10px}
+.btn{display:block;width:100%;border:2px solid var(--brand);border-radius:12px;background:var(--brand);color:#fff;padding:14px 18px;font-size:16px;font-weight:650;cursor:pointer;text-align:center;text-decoration:none;margin-top:14px;box-shadow:0 1px 2px rgba(13,107,82,.25);transition:background .15s,transform .15s,box-shadow .15s}
+.btn:hover{background:var(--brand-d);border-color:var(--brand-d);transform:translateY(-1px);box-shadow:0 6px 16px rgba(13,107,82,.28)}
+.btn:active{transform:none;box-shadow:none}
+.btn.alt{background:#fff;color:var(--brand-d);box-shadow:none}
+.btn.alt:hover{background:var(--tint);box-shadow:0 4px 12px rgba(16,36,30,.08)}
+.link{background:none;border:0;color:var(--brand-d);font-weight:600;font-size:15px;cursor:pointer;padding:10px 4px;text-decoration:underline;text-underline-offset:3px;text-decoration-color:transparent;transition:text-decoration-color .15s}
+.link:hover{text-decoration-color:currentColor}
+.bar{height:8px;background:var(--tint);border-radius:9px;overflow:hidden;margin:8px 0 18px}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:9px;transition:width .3s}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:10px;font-size:17px;font-weight:550;cursor:pointer;min-height:56px;box-shadow:var(--sh);transition:border-color .15s,background .15s,box-shadow .15s,transform .15s}
+.opt:hover{border-color:var(--brand);background:var(--tint);box-shadow:var(--sh-h);transform:translateY(-1px)}
+.opt:active{transform:none}
+.q{font-size:clamp(22px,5vw,26px);font-weight:700;line-height:1.3;letter-spacing:-.01em;margin:4px 0 8px}
+.dots{display:flex;gap:6px;margin:16px 0 4px}
+.dots i{flex:1;height:10px;border-radius:6px}
+.s0{background:var(--brand)}.s1{background:var(--amber)}.s2{background:var(--care)}
+.big{font-size:clamp(28px,7vw,36px);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--brand-d)}
+.flag{border-left:5px solid var(--amber)}
+.flag.f2{border-left-color:var(--care)}
+.chip{display:inline-block;font-size:13px;font-weight:650;padding:2px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+.chip.s1{background:var(--amber-bg);color:var(--amber-ink)}
+.chip.s2{background:var(--care-bg);color:var(--care)}
+.ok-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.ok-list span{background:var(--tint);color:var(--brand-d);border-radius:99px;padding:5px 14px;font-size:14.5px;font-weight:600}
+.support{border:1.5px solid var(--care);background:var(--care-bg)}
+.support .btn{background:var(--care);border-color:var(--care);box-shadow:none}
+.support .btn:hover{background:#962b24;border-color:#962b24}
+.task{display:flex;gap:14px;align-items:flex-start;padding:14px 8px;margin:0 -8px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:10px;transition:background .15s}
+.task:hover{background:var(--tint)}
+.task:last-child{border-bottom:0}
+.task input{width:24px;height:24px;accent-color:var(--brand);flex:none;margin-top:2px;cursor:pointer}
+.task input:checked+span{text-decoration:line-through;color:var(--mute)}
+label.f{display:block;font-size:14.5px;font-weight:650;margin:18px 0 6px}
+select,input[type=text]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:16px;transition:border-color .15s,box-shadow .15s}
+select:hover,input[type=text]:hover{border-color:#b7c9c1}
+select:focus,input[type=text]:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(13,107,82,.15);outline:0}
+.dd{position:relative}
+.dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:16px;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.dd-btn:hover{border-color:#b7c9c1}
+.dd-btn:focus-visible,.dd-btn[aria-expanded=true]{border-color:var(--brand);box-shadow:0 0 0 3px rgba(13,107,82,.15);outline:0}
+.dd-btn svg{flex:none;width:18px;height:18px;color:var(--mute);transition:transform .2s}
+.dd-btn[aria-expanded=true] svg{transform:rotate(180deg);color:var(--brand)}
+.dd-list{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:10;margin:0;padding:6px;list-style:none;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh-h);max-height:min(300px,45vh);overflow-y:auto;animation:ddin .14s ease-out}
+.dd-list.up{top:auto;bottom:calc(100% + 6px)}
+.dd-list li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border-radius:8px;cursor:pointer;font-size:16px}
+.dd-list li.act{background:var(--tint)}
+.dd-list li[aria-selected=true]{color:var(--brand-d);font-weight:650}
+.dd-list li[aria-selected=true]::after{content:"";flex:none;width:14px;height:8px;border-left:2.5px solid var(--brand);border-bottom:2.5px solid var(--brand);transform:rotate(-45deg) translateY(-2px)}
+@keyframes ddin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 12px rgba(16,36,30,.05);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{flex:1;max-width:210px;border:0;background:none;padding:16px 4px;cursor:pointer;color:var(--mute);font-size:15px;font-weight:600;transition:color .2s,background .15s}
+nav button:hover{background:var(--tint);color:var(--brand-d)}
+nav button[aria-selected=true]{color:var(--brand-d)}
+nav .ind{position:absolute;top:0;left:0;width:0;height:3px;background:var(--brand);border-radius:0 0 3px 3px;transition:transform .32s cubic-bezier(.22,.8,.3,1),width .32s cubic-bezier(.22,.8,.3,1)}
+main>section.leave{opacity:0;transform:translateY(6px);transition:opacity .14s ease,transform .14s ease}
+main>section.enter-r{animation:inR .3s cubic-bezier(.22,.8,.3,1) both}
+main>section.enter-l{animation:inL .3s cubic-bezier(.22,.8,.3,1) both}
+@keyframes inR{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}
+main,footer,nav b{transition:opacity .15s ease}
+body.swapping main,body.swapping footer,body.swapping nav b{opacity:0}
+footer{width:100%;max-width:640px;margin:0 auto;padding:8px 16px 20px;font-size:13px;color:var(--mute);line-height:1.55}
 [hidden]{display:none!important}
+/* ---------- Home hero ---------- */
+.card.hero{position:relative;overflow:hidden;text-align:center;padding:52px 36px 34px;border-radius:26px;background:linear-gradient(180deg,#fff 0%,#f2f9f5 100%);box-shadow:0 1px 2px rgba(16,36,30,.05),0 24px 60px rgba(13,107,82,.11)}
+.card.hero:hover{box-shadow:0 1px 2px rgba(16,36,30,.05),0 24px 60px rgba(13,107,82,.11)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero::before{width:340px;height:340px;right:-130px;top:-150px;background:radial-gradient(circle,rgba(13,107,82,.17),transparent 70%)}
+.hero::after{width:300px;height:300px;left:-130px;bottom:-150px;background:radial-gradient(circle,rgba(217,154,20,.13),transparent 70%)}
+.hero>*{position:relative;z-index:1;animation:rise .65s cubic-bezier(.22,.8,.3,1) both}
+.hero>:nth-child(2){animation-delay:.06s}.hero>:nth-child(3){animation-delay:.12s}.hero>:nth-child(4){animation-delay:.18s}.hero>:nth-child(5){animation-delay:.26s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;margin-bottom:22px;border-radius:99px;background:var(--tint);border:1px solid #cfe5da;color:var(--brand-d);font-size:13.5px;font-weight:650;line-height:1.3}
+.eyebrow::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(13,107,82,.16)}
+.hero h1{font-size:clamp(30px,6.4vw,46px);line-height:1.1;letter-spacing:-.035em;margin:0 auto 16px;max-width:15ch;text-wrap:balance}
+.hero .lead{margin:0 auto 30px;max-width:42ch;font-size:clamp(16px,2.4vw,18px);line-height:1.6}
+.hero .btn.cta{display:flex;align-items:center;justify-content:center;gap:10px;max-width:340px;margin:0 auto;padding:17px 26px;font-size:17px;border-radius:15px;background:linear-gradient(180deg,#14856a 0%,var(--brand-d) 100%);box-shadow:0 10px 24px rgba(13,107,82,.30),inset 0 1px 0 rgba(255,255,255,.18)}
+.hero .btn.cta svg{width:20px;height:20px;transition:transform .2s}
+.facts{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}
+.facts span{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--mute)}
+.facts svg{flex:none;width:18px;height:18px;color:var(--brand)}
+@media(hover:hover){.hero .btn.cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(13,107,82,.36),inset 0 1px 0 rgba(255,255,255,.18)}.hero .btn.cta:hover svg{transform:translateX(4px)}}
+@media(hover:none){
+.card:hover{box-shadow:var(--sh)}
+.btn:hover{background:var(--brand);border-color:var(--brand);transform:none;box-shadow:0 1px 2px rgba(13,107,82,.25)}
+.btn.alt:hover{background:#fff;box-shadow:none}
+.support .btn:hover{background:var(--care);border-color:var(--care)}
+.opt:hover{border-color:var(--line);background:#fff;transform:none;box-shadow:var(--sh)}
+.task:hover{background:none}
+nav button:hover{background:none;color:var(--mute)}
+nav button[aria-selected=true]:hover{color:var(--brand-d)}
+.langs button:hover{color:var(--mute)}
+.langs button[aria-pressed=true]:hover{color:#fff}
+.dd-btn:hover,input[type=text]:hover{border-color:var(--line)}
+.btn:active{background:var(--brand-d)}
+.btn.alt:active{background:var(--tint)}
+.support .btn:active{background:#962b24}
+.opt:active{background:var(--tint);border-color:var(--brand)}
+.task:active,.dd-list li:active{background:var(--tint)}
+}
+@media(max-width:600px){
+.top{padding:calc(8px + env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) 8px max(14px,env(safe-area-inset-left))}
+.brand{font-size:30px}
+.langs button{padding:9px 14px;font-size:15px;min-height:40px}
+main{padding:16px max(14px,env(safe-area-inset-right)) 16px max(14px,env(safe-area-inset-left))}
+.card{padding:18px;border-radius:16px;margin-bottom:14px}
+.card.hero{padding:38px 20px 26px;border-radius:22px}
+.eyebrow{margin-bottom:18px;font-size:13px}
+.hero .lead{margin-bottom:26px}
+.hero .btn.cta{max-width:none}
+.facts{gap:10px 16px;margin-top:26px;padding-top:20px}
+.facts span{font-size:13.5px}
+h1{font-size:26px}
+h2{font-size:21px}
+.lead{font-size:16px}
+.btn{padding:16px 18px;min-height:52px}
+.opt{padding:16px;min-height:60px}
+.task{gap:12px;padding:14px 8px}
+.task input{width:26px;height:26px}
+.dd-btn{min-height:52px}
+.dd-list li{padding:14px 12px}
+select,input[type=text]{padding:14px}
+.chip{margin-left:8px}
+nav button{padding:14px 2px 16px;font-size:14.5px}
+footer{padding:8px max(18px,env(safe-area-inset-right)) 18px max(18px,env(safe-area-inset-left));font-size:12.5px}
+}
+@media(max-width:360px){
+.brand{font-size:26px}
+.langs button{padding:9px 11px}
+.card{padding:16px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<header><h1>InnerIQ 💚</h1><p id="tagline">Your health has a story. Discover it.</p></header>
-<div class="language-box"><label for="language" id="languageLabel">Choose your language:</label><br>
-<select id="language"><option value="en">English</option><option value="hi">हिन्दी (Hindi)</option><option value="te">తెలుగు (Telugu)</option></select></div>
+<header class="top"><div class="top-in">
+  <div class="brand" aria-label="InnerIQ">Inner<b>IQ</b></div>
+  <div class="langs" role="group" aria-label="Language">
+    <i class="thumb" aria-hidden="true"></i>
+    <button data-l="en">EN</button><button data-l="hi">हिं</button><button data-l="te">తె</button>
+  </div>
+</div></header>
+
 <main>
-<section class="card">
-<h2 id="questionsTitle">💚 Your Wellbeing Check-in</h2><p id="questionsIntro">Answer these 8 questions to reflect on your everyday habits.</p>
-<form id="wellbeingForm"><div id="questionsContainer"></div><button type="submit" id="submitAnswers">Save My Answers</button></form>
-<div id="answerMessage" class="result" role="status" hidden></div>
-<button type="button" id="makeReport">Create my awareness summary</button>
-<p class="note" id="healthNote">This check-in is for general wellbeing awareness. It does not diagnose health conditions or replace advice from a qualified healthcare professional.</p>
-<div id="report" class="result" hidden></div>
-</section>
-<section class="card"><h2 id="tasksTitle">✅ Daily Wellbeing Tasks</h2><p id="tasksIntro">Small, realistic steps to support your everyday wellbeing.</p>
-<div id="tasksContainer"></div><p id="taskProgress">0 of 5 tasks completed</p><button type="button" class="secondary" id="resetTasks">Reset Daily Tasks</button></section>
-<section class="card"><h2 id="doctorTitle">🩺 Find a Doctor</h2><p id="doctorIntro">Search Google for doctors near your location.</p>
-<form id="doctorForm">
-<label for="doctorCity" id="cityLabel">City</label><input type="text" id="doctorCity" placeholder="Enter your city" autocomplete="address-level2" required>
-<label for="doctorPincode" id="pincodeLabel">PIN Code</label><input type="text" id="doctorPincode" placeholder="Enter your 6-digit PIN code" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
-<label for="doctorType" id="specialistLabel">Choose the type of doctor</label><select id="doctorType" required></select>
-<button type="submit" id="searchDoctors">Show Nearby Doctors</button></form>
-<p class="note" id="doctorNote">Google Search may show doctor names, clinics and locations. Check qualifications and contact details before booking. InnerIQ does not verify individual doctors.</p></section>
-</main><footer id="footerText">InnerIQ is a wellbeing awareness prototype. Your health matters.</footer>
+  <section id="v-check" aria-live="polite"></section>
+  <section id="v-today" hidden></section>
+  <section id="v-doc" hidden></section>
+</main>
+<footer data-i="disc"></footer>
+
+<nav role="tablist">
+  <i class="ind" aria-hidden="true"></i>
+  <button role="tab" data-tab="check"><b data-i="tabCheck"></b></button>
+  <button role="tab" data-tab="today"><b data-i="tabToday"></b></button>
+  <button role="tab" data-tab="doc"><b data-i="tabDoc"></b></button>
+</nav>
+
 <script>
+/* ---------- Content ---------- */
 const T={
-en:{tagline:"Your health has a story. Discover it.",languageLabel:"Choose your language:",questionsTitle:"💚 Your Wellbeing Check-in",questionsIntro:"Answer these 8 questions to reflect on your everyday habits.",submitAnswers:"Save My Answers",healthNote:"This check-in is for general wellbeing awareness. It does not diagnose health conditions or replace advice from a qualified healthcare professional.",answerSaved:"Your answers have been saved on this device for this session. Thank you for checking in with yourself!",answerIncomplete:"Please answer all 8 questions first.",tasksTitle:"✅ Daily Wellbeing Tasks",tasksIntro:"Small, realistic steps to support your everyday wellbeing.",taskProgress:"{done} of 5 tasks completed",resetTasks:"Reset Daily Tasks",doctorTitle:"🩺 Find a Doctor",doctorIntro:"Search Google for doctors near your location.",cityLabel:"City",cityPlaceholder:"Enter your city",pincodeLabel:"PIN Code",pincodePlaceholder:"Enter your 6-digit PIN code",specialistLabel:"Choose the type of doctor",specialistPlaceholder:"Select a specialist",searchDoctors:"Show Nearby Doctors",doctorNote:"Google Search may show doctor names, clinics and locations. Check qualifications and contact details before booking. InnerIQ does not verify individual doctors.",footerText:"InnerIQ is a wellbeing awareness prototype. Your health matters.",cityError:"Please enter your city.",pincodeError:"Please enter a valid 6-digit Indian PIN code.",specialistError:"Please choose a type of doctor.",reportTitle:"Your wellbeing awareness summary",reportDisclaimer:"This is not a diagnosis. Consider speaking with a qualified healthcare professional if you have concerns.",questions:["1. Do you usually get enough sleep?","2. How has your mood been recently?","3. Do you drink enough water during the day?","4. Do you get regular physical activity?","5. How often do you feel stressed or overwhelmed?","6. Do you use tobacco or smoke?","7. Do you drink alcohol?","8. How would you describe your eating habits?"],answers:[["Usually","Sometimes","Rarely"],["Mostly good","Mixed","Often low"],["Usually","Sometimes","Rarely"],["Most days","Some days","Rarely"],["Often","Sometimes","Rarely"],["Yes","Sometimes","No"],["Yes","Sometimes","No"],["Mostly balanced","Sometimes balanced","Need more balance"]],tasks:["Drink water regularly throughout the day.","Take a short walk or do comfortable movement.","Include a variety of nourishing foods in your meals.","Take a short break when you feel stressed.","Make time for a consistent, restful sleep routine."],specialists:[["General Physician","General Physician"],["Cardiologist","Cardiologist (Heart)"],["Dermatologist","Dermatologist (Skin)"],["Dentist","Dentist"],["Ophthalmologist","Eye Specialist"],["Gynecologist","Gynecologist"],["Psychologist","Psychologist (Mental Wellbeing)"],["Psychiatrist","Psychiatrist"],["Pediatrician","Pediatrician (Children)"],["Orthopedic Doctor","Orthopedic Doctor (Bones and Joints)"],["ENT Specialist","ENT Specialist (Ear, Nose and Throat)"]]},
-hi:{tagline:"आपकी सेहत की एक कहानी है। इसे जानें।",languageLabel:"अपनी भाषा चुनें:",questionsTitle:"💚 आपकी सेहत की जाँच",questionsIntro:"अपनी रोज़मर्रा की आदतों को समझने के लिए इन 8 सवालों के जवाब दें।",submitAnswers:"मेरे जवाब सेव करें",healthNote:"यह जाँच सामान्य स्वास्थ्य जागरूकता के लिए है। यह किसी बीमारी का निदान नहीं करती और डॉक्टर की सलाह का विकल्प नहीं है।",answerSaved:"आपके जवाब इस सत्र के लिए सेव हो गए हैं। अपना ध्यान रखने के लिए धन्यवाद!",answerIncomplete:"कृपया पहले सभी 8 सवालों के जवाब दें।",tasksTitle:"✅ रोज़ाना सेहत के काम",tasksIntro:"अपनी सेहत का ध्यान रखने के लिए छोटे और आसान कदम।",taskProgress:"5 में से {done} काम पूरे हुए",resetTasks:"काम फिर से शुरू करें",doctorTitle:"🩺 डॉक्टर खोजें",doctorIntro:"अपने इलाके के डॉक्टरों को Google पर खोजें।",cityLabel:"शहर",cityPlaceholder:"अपने शहर का नाम लिखें",pincodeLabel:"पिन कोड",pincodePlaceholder:"6 अंकों का पिन कोड लिखें",specialistLabel:"डॉक्टर का प्रकार चुनें",specialistPlaceholder:"विशेषज्ञ चुनें",searchDoctors:"आस-पास के डॉक्टर खोजें",doctorNote:"Google Search पर डॉक्टरों के नाम और क्लिनिक की जानकारी मिल सकती है। बुकिंग से पहले उनकी योग्यता और संपर्क जानकारी जाँचें। InnerIQ डॉक्टरों की पुष्टि नहीं करता।",footerText:"InnerIQ स्वास्थ्य जागरूकता के लिए एक प्रोटोटाइप है। आपकी सेहत मायने रखती है।",cityError:"कृपया अपने शहर का नाम लिखें।",pincodeError:"कृपया 6 अंकों का सही भारतीय पिन कोड लिखें।",specialistError:"कृपया डॉक्टर का प्रकार चुनें।",reportTitle:"आपकी स्वास्थ्य जागरूकता सारांश",reportDisclaimer:"यह निदान नहीं है। चिंता होने पर योग्य स्वास्थ्य पेशेवर से बात करें।",questions:["1. क्या आपको आमतौर पर पर्याप्त नींद मिलती है?","2. हाल ही में आपका मूड कैसा रहा है?","3. क्या आप दिन भर पर्याप्त पानी पीते हैं?","4. क्या आप नियमित रूप से शारीरिक गतिविधि करते हैं?","5. आप कितनी बार तनाव महसूस करते हैं?","6. क्या आप तंबाकू का इस्तेमाल करते हैं या धूम्रपान करते हैं?","7. क्या आप शराब पीते हैं?","8. आपकी खाने की आदतें कैसी हैं?"],answers:[["आमतौर पर","कभी-कभी","बहुत कम"],["अधिकतर अच्छा","मिला-जुला","अक्सर उदास"],["आमतौर पर","कभी-कभी","बहुत कम"],["अधिकतर दिन","कुछ दिन","बहुत कम"],["अक्सर","कभी-कभी","बहुत कम"],["हाँ","कभी-कभी","नहीं"],["हाँ","कभी-कभी","नहीं"],["अधिकतर संतुलित","कभी-कभी संतुलित","और संतुलन चाहिए"]],tasks:["दिन भर नियमित रूप से पानी पिएँ।","थोड़ी देर टहलें या आरामदायक शारीरिक गतिविधि करें।","अपने भोजन में अलग-अलग पौष्टिक चीज़ें शामिल करें।","तनाव महसूस होने पर थोड़ा आराम करें।","नियमित और अच्छी नींद की दिनचर्या बनाएँ।"],specialists:[["General Physician","सामान्य चिकित्सक"],["Cardiologist","हृदय रोग विशेषज्ञ"],["Dermatologist","त्वचा रोग विशेषज्ञ"],["Dentist","दंत चिकित्सक"],["Ophthalmologist","नेत्र विशेषज्ञ"],["Gynecologist","स्त्री रोग विशेषज्ञ"],["Psychologist","मनोवैज्ञानिक"],["Psychiatrist","मनोचिकित्सक"],["Pediatrician","बाल रोग विशेषज्ञ"],["Orthopedic Doctor","हड्डी और जोड़ विशेषज्ञ"],["ENT Specialist","कान, नाक और गला विशेषज्ञ"]]},
-te:{tagline:"మీ ఆరోగ్యానికి ఒక కథ ఉంది. దాన్ని తెలుసుకోండి.",languageLabel:"మీ భాషను ఎంచుకోండి:",questionsTitle:"💚 మీ ఆరోగ్యంపై చిన్న పరిశీలన",questionsIntro:"మీ రోజువారీ అలవాట్లను అర్థం చేసుకోవడానికి ఈ 8 ప్రశ్నలకు సమాధానమివ్వండి.",submitAnswers:"నా సమాధానాలను సేవ్ చేయండి",healthNote:"ఈ ప్రశ్నలు సాధారణ ఆరోగ్య అవగాహన కోసం మాత్రమే. ఇవి వ్యాధులను నిర్ధారించవు మరియు వైద్యుల సలహాకు ప్రత్యామ్నాయం కావు.",answerSaved:"మీ సమాధానాలు ఈ సెషన్ కోసం సేవ్ చేయబడ్డాయి. ధన్యవాదాలు!",answerIncomplete:"దయచేసి ముందుగా మొత్తం 8 ప్రశ్నలకు సమాధానమివ్వండి.",tasksTitle:"✅ రోజువారీ ఆరోగ్య పనులు",tasksIntro:"మీ రోజువారీ ఆరోగ్యాన్ని మెరుగుపరచడానికి చిన్న, సులభమైన పనులు.",taskProgress:"5 పనుల్లో {done} పూర్తయ్యాయి",resetTasks:"రోజువారీ పనులను రీసెట్ చేయండి",doctorTitle:"🩺 వైద్యుడిని కనుగొనండి",doctorIntro:"మీ ప్రాంతంలోని వైద్యులను Googleలో వెతకండి.",cityLabel:"నగరం",cityPlaceholder:"మీ నగరం పేరు నమోదు చేయండి",pincodeLabel:"పిన్ కోడ్",pincodePlaceholder:"6 అంకెల పిన్ కోడ్ నమోదు చేయండి",specialistLabel:"వైద్యుని రకాన్ని ఎంచుకోండి",specialistPlaceholder:"నిపుణుడిని ఎంచుకోండి",searchDoctors:"దగ్గరలోని వైద్యులను చూపించండి",doctorNote:"Google Searchలో వైద్యుల పేర్లు, క్లినిక్ వివరాలు కనిపించవచ్చు. అర్హతలు, సంప్రదింపు వివరాలను తనిఖీ చేయండి. InnerIQ వైద్యులను ధృవీకరించదు.",footerText:"InnerIQ ఆరోగ్య అవగాహన కోసం రూపొందించిన ప్రోటోటైప్. మీ ఆరోగ్యం ముఖ్యం.",cityError:"దయచేసి మీ నగరం పేరును నమోదు చేయండి.",pincodeError:"దయచేసి సరైన 6 అంకెల భారతీయ పిన్ కోడ్ నమోదు చేయండి.",specialistError:"దయచేసి వైద్యుని రకాన్ని ఎంచుకోండి.",reportTitle:"మీ ఆరోగ్య అవగాహన సారాంశం",reportDisclaimer:"ఇది వైద్య నిర్ధారణ కాదు. ఆందోళన ఉంటే అర్హత కలిగిన వైద్య నిపుణుడిని సంప్రదించండి.",questions:["1. మీకు సాధారణంగా తగినంత నిద్ర వస్తుందా?","2. ఇటీవల మీ మానసిక స్థితి ఎలా ఉంది?","3. రోజంతా తగినంత నీరు తాగుతున్నారా?","4. మీరు క్రమం తప్పకుండా శారీరక వ్యాయామం చేస్తున్నారా?","5. మీరు ఎంత తరచుగా ఒత్తిడికి గురవుతున్నారు?","6. మీరు పొగాకు వాడుతున్నారా లేదా ధూమపానం చేస్తున్నారా?","7. మీరు మద్యం సేవిస్తున్నారా?","8. మీ ఆహారపు అలవాట్లు ఎలా ఉన్నాయి?"],answers:[["సాధారణంగా","కొన్నిసార్లు","అరుదుగా"],["చాలావరకు బాగుంది","మిశ్రమంగా","తరచుగా దిగులుగా"],["సాధారణంగా","కొన్నిసార్లు","అరుదుగా"],["చాలా రోజులు","కొన్ని రోజులు","అరుదుగా"],["తరచుగా","కొన్నిసార్లు","అరుదుగా"],["అవును","కొన్నిసార్లు","కాదు"],["అవును","కొన్నిసార్లు","కాదు"],["చాలావరకు సమతుల్యంగా","కొన్నిసార్లు సమతుల్యంగా","మరింత సమతుల్యత అవసరం"]],tasks:["రోజంతా క్రమం తప్పకుండా నీరు తాగండి.","కొద్దిసేపు నడవండి లేదా సౌకర్యమైన శారీరక కదలికలు చేయండి.","మీ భోజనంలో వివిధ పోషకాహారాలను చేర్చండి.","ఒత్తిడిగా అనిపించినప్పుడు కొద్దిసేపు విశ్రాంతి తీసుకోండి.","క్రమమైన, ప్రశాంతమైన నిద్ర అలవాటును ఏర్పరచుకోండి."],specialists:[["General Physician","సాధారణ వైద్యుడు"],["Cardiologist","గుండె నిపుణుడు"],["Dermatologist","చర్మ నిపుణుడు"],["Dentist","దంత వైద్యుడు"],["Ophthalmologist","కంటి నిపుణుడు"],["Gynecologist","స్త్రీల ఆరోగ్య నిపుణుడు"],["Psychologist","మనస్తత్వ నిపుణుడు"],["Psychiatrist","మానసిక వైద్యుడు"],["Pediatrician","పిల్లల వైద్యుడు"],["Orthopedic Doctor","ఎముకలు, కీళ్ల నిపుణుడు"],["ENT Specialist","చెవి, ముక్కు, గొంతు నిపుణుడు"]]}}
-const $=id=>document.getElementById(id), language=$("language");
-function renderQuestions(lang){const d=T[lang],c=$("questionsContainer");c.replaceChildren();d.questions.forEach((q,i)=>{const box=document.createElement("div");box.className="question";const p=document.createElement("p");p.textContent=q;box.append(p);d.answers[i].forEach((a,j)=>{const label=document.createElement("label");label.className="option";const input=document.createElement("input");input.type="radio";input.name="question"+i;input.value=String(j);input.required=true;const span=document.createElement("span");span.textContent=a;label.append(input,span);box.append(label)});c.append(box)})}
-function renderTasks(lang){const c=$("tasksContainer");c.replaceChildren();T[lang].tasks.forEach((task,i)=>{const row=document.createElement("div");row.className="task";const cb=document.createElement("input");cb.type="checkbox";cb.id="task"+i;const label=document.createElement("label");label.htmlFor=cb.id;label.textContent=task;cb.addEventListener("change",updateProgress);row.append(cb,label);c.append(row)});updateProgress()}
-function renderSpecialists(lang){const s=$("doctorType"),d=T[lang];s.replaceChildren();const p=document.createElement("option");p.value="";p.textContent=d.specialistPlaceholder;p.disabled=true;p.selected=true;s.append(p);d.specialists.forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;s.append(o)})}
-function updateProgress(){const done=$("tasksContainer").querySelectorAll("input:checked").length;$("taskProgress").textContent=T[language.value].taskProgress.replace("{done}",done)}
-function changeLanguage(lang){const d=T[lang];document.documentElement.lang=lang;["tagline","languageLabel","questionsTitle","questionsIntro","submitAnswers","healthNote","tasksTitle","tasksIntro","resetTasks","doctorTitle","doctorIntro","cityLabel","pincodeLabel","specialistLabel","searchDoctors","doctorNote","footerText"].forEach(id=>$(id).textContent=d[id]);$("doctorCity").placeholder=d.cityPlaceholder;$("doctorPincode").placeholder=d.pincodePlaceholder;renderQuestions(lang);renderTasks(lang);renderSpecialists(lang);$("answerMessage").hidden=true;$("report").hidden=true}
-language.addEventListener("change",()=>changeLanguage(language.value));
-$("wellbeingForm").addEventListener("submit",e=>{e.preventDefault();if(!e.currentTarget.reportValidity())return;$("answerMessage").textContent=T[language.value].answerSaved;$("answerMessage").hidden=false});
-$("makeReport").addEventListener("click",()=>{const lang=language.value,d=T[lang],form=$("wellbeingForm");if(!form.reportValidity()){form.querySelector(":invalid")?.focus();return}const lines=[d.reportTitle,""];d.questions.forEach((q,i)=>{const selected=form.querySelector('input[name="question'+i+'"]:checked');lines.push(q, "• "+d.answers[i][Number(selected.value)]);});lines.push("",d.reportDisclaimer);$("report").textContent=lines.join("\n");$("report").hidden=false;$("report").scrollIntoView({behavior:"smooth",block:"nearest"})});
-$("resetTasks").addEventListener("click",()=>{$("tasksContainer").querySelectorAll("input[type=checkbox]").forEach(cb=>cb.checked=false);updateProgress()});
-$("doctorForm").addEventListener("submit",e=>{e.preventDefault();const d=T[language.value],city=$("doctorCity").value.trim(),pin=$("doctorPincode").value.trim(),type=$("doctorType").value;if(!city){alert(d.cityError);return}if(!/^[0-9]{6}$/.test(pin)){alert(d.pincodeError);return}if(!type){alert(d.specialistError);return}const query=encodeURIComponent(type+" near "+city+" "+pin);window.open("https://www.google.com/search?q="+query,"_blank","noopener")});
-changeLanguage("en");
+en:{tag:"Your health has a story, Discover it.",tabCheck:"Check-in",tabToday:"Daily",tabDoc:"Doctor",
+disc:"InnerIQ is for general wellbeing awareness. It is not a diagnosis and does not replace a qualified healthcare professional. Your answers stay on this device.",
+introT:"How are your daily habits?",introP:"Answer a few quick questions and get a simple summary with small steps for today.",f1:"8 questions",f2:"About 2 minutes",f3:"Stays on your device",start:"Start check-in",
+qOf:"Question {n} of 8",back:"Back",
+resT:"Your summary",resN:"{n} of 8 areas going well",focus:"Worth your attention",well:"Going well",st1:"Worth a look",st2:"Needs care",
+supT:"You don't have to carry this alone",supP:"Free, confidential counselling, 24×7, in your language. Call Tele-MANAS:",call:"Call 14416",emerg:"In an emergency, call 112.",
+plan:"Open today's plan",find:"Find a specialist",retake:"Retake check-in",
+todayT:"Today's plan",todayP:"Small steps. Tick them off as you go.",mine:"From your check-in",base:"Daily basics",done:"{d} of {n} done",reset:"Clear today's ticks",allDone:"All done. Well done today! ",
+docT:"Find a doctor",docP:"Opens Google Maps or Google Search near you.",spec:"Type of doctor",city:"City or area",cityPh:"e.g. Hyderabad",pin:"PIN code (optional)",pinErr:"PIN code must be 6 digits.",maps:"Search on Google Maps",goog:"Search on Google",
+docNote:"InnerIQ does not verify doctors. Check qualifications and contact details before you book.",
+pickSpec:"Choose a type of doctor",
+sets:{F:["Usually","Sometimes","Rarely"],M:["Mostly good","Mixed","Often low"],S:["Rarely","Sometimes","Often"],Y:["No","Sometimes","Yes"],E:["Mostly balanced","Sometimes balanced","Needs more balance"]},
+tasks:["Drink water regularly through the day","Take a short walk or move comfortably","Add variety to your meals","Take a short break when stressed","Keep a steady, restful sleep routine"],
+specs:["General Physician","Cardiologist (Heart)","Dermatologist (Skin)","Dentist","Eye Specialist","Gynecologist","Psychologist","Psychiatrist","Pediatrician (Children)","Orthopedic (Bones and Joints)","ENT (Ear, Nose, Throat)"],
+D:[["Sleep","Do you usually get enough sleep?","Keep fixed sleep and wake times, and put screens away 30 minutes before bed."],
+["Mood","How has your mood been recently?","Do something you enjoy today and tell someone you trust how you feel."],
+["Water","Do you drink enough water during the day?","Keep a bottle within reach and sip regularly through the day."],
+["Activity","Do you get regular physical activity?","Add a 15-minute walk, dance or cycle ride you enjoy."],
+["Stress","How often do you feel stressed or overwhelmed?","Take short breaks, breathe slowly for one minute, and share what is weighing on you."],
+["Tobacco","Do you use tobacco or smoke?","Cutting down helps. A doctor can support you in quitting."],
+["Alcohol","Do you drink alcohol?","Alcohol can harm health. Consider cutting back and talk to a trusted adult or doctor."],
+["Eating","How would you describe your eating habits?","Aim for regular meals with variety. Add one fruit or vegetable today."]]},
+hi:{tag:"छोटी रोज़ की आदतें, बड़ा फ़र्क",tabCheck:"जाँच",tabToday:"रोज़ाना",tabDoc:"डॉक्टर",
+disc:"InnerIQ सामान्य स्वास्थ्य जागरूकता के लिए है। यह निदान नहीं है और डॉक्टर की सलाह का विकल्प नहीं है। आपके जवाब इसी डिवाइस पर रहते हैं।",
+introT:"आपकी रोज़ की आदतें कैसी हैं?",introP:"कुछ छोटे सवालों के जवाब दें और आज के लिए एक आसान सारांश व छोटे कदम पाएँ।",f1:"8 सवाल",f2:"लगभग 2 मिनट",f3:"आपके डिवाइस पर ही",start:"जाँच शुरू करें",
+qOf:"सवाल {n} / 8",back:"पीछे",
+resT:"आपका सारांश",resN:"8 में से {n} क्षेत्र अच्छे हैं",focus:"ध्यान देने लायक",well:"अच्छा चल रहा है",st1:"ध्यान दें",st2:"देखभाल ज़रूरी",
+supT:"आपको यह अकेले नहीं झेलना है",supP:"मुफ़्त, गोपनीय परामर्श, 24×7, आपकी भाषा में। Tele-MANAS को कॉल करें:",call:"14416 पर कॉल करें",emerg:"आपातकाल में 112 पर कॉल करें।",
+plan:"आज की योजना खोलें",find:"विशेषज्ञ खोजें",retake:"जाँच दोबारा करें",
+todayT:"आज की योजना",todayP:"छोटे कदम। करते जाएँ और टिक करें।",mine:"आपकी जाँच से",base:"रोज़ की बुनियादी बातें",done:"{n} में से {d} पूरे",reset:"आज के टिक हटाएँ",allDone:"सब पूरा! आज बहुत अच्छा किया ",
+docT:"डॉक्टर खोजें",docP:"आपके पास के लिए Google Maps या Google Search खुलेगा।",spec:"डॉक्टर का प्रकार",city:"शहर या इलाका",cityPh:"जैसे हैदराबाद",pin:"पिन कोड (वैकल्पिक)",pinErr:"पिन कोड 6 अंकों का होना चाहिए।",maps:"Google Maps पर खोजें",goog:"Google पर खोजें",
+docNote:"InnerIQ डॉक्टरों की पुष्टि नहीं करता। बुकिंग से पहले योग्यता और संपर्क जानकारी जाँचें।",
+pickSpec:"डॉक्टर का प्रकार चुनें",
+sets:{F:["आमतौर पर","कभी-कभी","बहुत कम"],M:["अधिकतर अच्छा","मिला-जुला","अक्सर उदास"],S:["बहुत कम","कभी-कभी","अक्सर"],Y:["नहीं","कभी-कभी","हाँ"],E:["अधिकतर संतुलित","कभी-कभी संतुलित","और संतुलन चाहिए"]},
+tasks:["दिन भर नियमित रूप से पानी पिएँ","थोड़ा टहलें या आराम से शरीर चलाएँ","भोजन में विविधता लाएँ","तनाव में थोड़ा ब्रेक लें","नियमित, आरामदायक नींद की दिनचर्या रखें"],
+specs:["सामान्य चिकित्सक","हृदय रोग विशेषज्ञ","त्वचा रोग विशेषज्ञ","दंत चिकित्सक","नेत्र विशेषज्ञ","स्त्री रोग विशेषज्ञ","मनोवैज्ञानिक","मनोचिकित्सक","बाल रोग विशेषज्ञ","हड्डी और जोड़ विशेषज्ञ","कान, नाक और गला विशेषज्ञ"],
+D:[["नींद","क्या आपको आमतौर पर पर्याप्त नींद मिलती है?","रोज़ तय समय पर सोएँ और जागें; सोने से 30 मिनट पहले स्क्रीन बंद करें।"],
+["मनोदशा","हाल ही में आपका मूड कैसा रहा है?","आज कुछ पसंद का करें और किसी भरोसेमंद व्यक्ति को अपनी भावनाएँ बताएँ।"],
+["पानी","क्या आप दिन भर पर्याप्त पानी पीते हैं?","बोतल पास रखें और दिन भर थोड़ा-थोड़ा पीते रहें।"],
+["गतिविधि","क्या आप नियमित रूप से शारीरिक गतिविधि करते हैं?","15 मिनट टहलना, नाचना या साइकिल चलाना जैसा कुछ पसंद का जोड़ें।"],
+["तनाव","आप कितनी बार तनाव या बोझ महसूस करते हैं?","छोटे ब्रेक लें, एक मिनट धीरे-धीरे साँस लें और जो परेशान कर रहा है उसे साझा करें।"],
+["तंबाकू","क्या आप तंबाकू का इस्तेमाल करते हैं या धूम्रपान करते हैं?","कम करना भी मदद करता है। छोड़ने में डॉक्टर आपकी सहायता कर सकते हैं।"],
+["शराब","क्या आप शराब पीते हैं?","शराब सेहत को नुकसान पहुँचा सकती है। कम करें और किसी भरोसेमंद वयस्क या डॉक्टर से बात करें।"],
+["खान-पान","आपकी खाने की आदतें कैसी हैं?","नियमित और विविध भोजन करें। आज एक फल या सब्ज़ी जोड़ें।"]]},
+te:{tag:"చిన్న రోజువారీ అలవాట్లు, పెద్ద మార్పు",tabCheck:"పరిశీలన",tabToday:"రోజువారీ",tabDoc:"వైద్యుడు",
+disc:"InnerIQ సాధారణ ఆరోగ్య అవగాహన కోసం మాత్రమే. ఇది వైద్య నిర్ధారణ కాదు, వైద్యుల సలహాకు ప్రత్యామ్నాయం కాదు. మీ సమాధానాలు ఈ పరికరంలోనే ఉంటాయి.",
+introT:"మీ రోజువారీ అలవాట్లు ఎలా ఉన్నాయి?",introP:"కొన్ని చిన్న ప్రశ్నలకు సమాధానం ఇవ్వండి; ఈరోజుకు సులభమైన సారాంశం, చిన్న అడుగులు పొందండి.",f1:"8 ప్రశ్నలు",f2:"సుమారు 2 నిమిషాలు",f3:"మీ పరికరంలోనే",start:"పరిశీలన మొదలుపెట్టండి",
+qOf:"ప్రశ్న {n} / 8",back:"వెనుకకు",
+resT:"మీ సారాంశం",resN:"8 లో {n} అంశాలు బాగున్నాయి",focus:"శ్రద్ధ అవసరం",well:"బాగున్నవి",st1:"గమనించండి",st2:"శ్రద్ధ అవసరం",
+supT:"దీన్ని మీరు ఒంటరిగా మోయనక్కర్లేదు",supP:"ఉచిత, గోప్యమైన కౌన్సెలింగ్, 24×7, మీ భాషలో. Tele-MANAS కు కాల్ చేయండి:",call:"14416 కు కాల్ చేయండి",emerg:"అత్యవసరమైతే 112 కు కాల్ చేయండి.",
+plan:"ఈరోజు ప్లాన్ చూడండి",find:"నిపుణుడిని వెతకండి",retake:"మళ్లీ పరిశీలించండి",
+todayT:"ఈరోజు ప్లాన్",todayP:"చిన్న అడుగులు. చేస్తూ టిక్ చేయండి.",mine:"మీ పరిశీలన నుండి",base:"రోజువారీ ప్రాథమికాలు",done:"{n} లో {d} పూర్తి",reset:"ఈరోజు టిక్‌లు తొలగించండి",allDone:"అన్నీ పూర్తి! ఈరోజు బాగా చేశారు ",
+docT:"వైద్యుడిని వెతకండి",docP:"మీ దగ్గర కోసం Google Maps లేదా Google Search తెరుచుకుంటుంది.",spec:"వైద్యుని రకం",city:"నగరం లేదా ప్రాంతం",cityPh:"ఉదా. హైదరాబాద్",pin:"పిన్ కోడ్ (ఐచ్ఛికం)",pinErr:"పిన్ కోడ్ 6 అంకెలు ఉండాలి.",maps:"Google Mapsలో వెతకండి",goog:"Googleలో వెతకండి",
+docNote:"InnerIQ వైద్యులను ధృవీకరించదు. అపాయింట్‌మెంట్‌కు ముందు అర్హతలు, సంప్రదింపు వివరాలు తనిఖీ చేయండి.",
+pickSpec:"వైద్యుని రకాన్ని ఎంచుకోండి",
+sets:{F:["సాధారణంగా","కొన్నిసార్లు","అరుదుగా"],M:["చాలావరకు బాగుంది","మిశ్రమంగా","తరచుగా దిగులుగా"],S:["అరుదుగా","కొన్నిసార్లు","తరచుగా"],Y:["కాదు","కొన్నిసార్లు","అవును"],E:["చాలావరకు సమతుల్యంగా","కొన్నిసార్లు సమతుల్యంగా","మరింత సమతుల్యత అవసరం"]},
+tasks:["రోజంతా క్రమం తప్పకుండా నీరు తాగండి","కొద్దిసేపు నడవండి లేదా సౌకర్యంగా కదలండి","భోజనంలో వైవిధ్యం చేర్చండి","ఒత్తిడిగా ఉంటే కొద్దిసేపు విరామం తీసుకోండి","క్రమమైన, ప్రశాంతమైన నిద్ర అలవాటు ఉంచుకోండి"],
+specs:["సాధారణ వైద్యుడు","గుండె నిపుణుడు","చర్మ నిపుణుడు","దంత వైద్యుడు","కంటి నిపుణుడు","స్త్రీల ఆరోగ్య నిపుణుడు","మనస్తత్వ నిపుణుడు","మానసిక వైద్యుడు","పిల్లల వైద్యుడు","ఎముకలు, కీళ్ల నిపుణుడు","చెవి, ముక్కు, గొంతు నిపుణుడు"],
+D:[["నిద్ర","మీకు సాధారణంగా తగినంత నిద్ర వస్తుందా?","ప్రతిరోజూ ఒకే సమయానికి నిద్రపోండి, లేవండి; పడుకునే 30 నిమిషాల ముందు స్క్రీన్లు ఆపండి."],
+["మానసిక స్థితి","ఇటీవల మీ మానసిక స్థితి ఎలా ఉంది?","ఈరోజు ఇష్టమైన పని చేయండి, మీ భావాలను నమ్మకమైన వ్యక్తికి చెప్పండి."],
+["నీరు","రోజంతా తగినంత నీరు తాగుతున్నారా?","బాటిల్ దగ్గర ఉంచుకుని రోజంతా కొద్దికొద్దిగా తాగండి."],
+["కదలిక","మీరు క్రమం తప్పకుండా శారీరక వ్యాయామం చేస్తున్నారా?","15 నిమిషాల నడక, నృత్యం లేదా సైక్లింగ్ చేర్చండి."],
+["ఒత్తిడి","మీరు ఎంత తరచుగా ఒత్తిడికి గురవుతున్నారు?","చిన్న విరామాలు తీసుకోండి, ఒక నిమిషం నెమ్మదిగా శ్వాస తీసుకోండి, మీ బాధను పంచుకోండి."],
+["పొగాకు","మీరు పొగాకు వాడుతున్నారా లేదా ధూమపానం చేస్తున్నారా?","తగ్గించడం కూడా సహాయపడుతుంది. మానేయడంలో వైద్యుడు సహాయం చేస్తారు."],
+["మద్యం","మీరు మద్యం సేవిస్తున్నారా?","మద్యం ఆరోగ్యానికి హానికరం. తగ్గించండి, నమ్మకమైన పెద్దవారితో లేదా వైద్యుడితో మాట్లాడండి."],
+["ఆహారం","మీ ఆహారపు అలవాట్లు ఎలా ఉన్నాయి?","క్రమం తప్పకుండా వైవిధ్యంగా తినండి. ఈరోజు ఒక పండు లేదా కూరగాయ చేర్చండి."]]}
+};
+/* answer-set per question, icon per question. Options are ordered best -> most concerning, so index = concern level (0,1,2). */
+const SET=["F","M","F","F","S","Y","Y","E"];
+const SPEC_Q=["General Physician","Cardiologist","Dermatologist","Dentist","Ophthalmologist","Gynecologist","Psychologist","Psychiatrist","Pediatrician","Orthopedic Doctor","ENT Specialist"];
+
+/* ---------- Helpers & storage ---------- */
+const $=s=>document.querySelector(s);
+const store=(k,v)=>{try{if(v===undefined){return JSON.parse(localStorage.getItem("iq_"+k))}localStorage.setItem("iq_"+k,JSON.stringify(v))}catch(e){return null}};
+let lang=store("lang")||"en", tab="check", step=-1, ans=[], pendingSpec=null;
+let draft={sp:0,ct:store("city")||"",pc:store("pin")||""}, docDirty=false;
+const t=k=>T[lang][k], fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]);
+const today=()=>new Date().toLocaleDateString("en-CA");
+
+/* ---------- Check-in ---------- */
+function renderCheck(){
+  const el=$("#v-check"), saved=store("res");
+  if(step>=0){
+    const D=t("D")[step], opts=t("sets")[SET[step]];
+    el.innerHTML=`<div class="card"><div class="mute">${fill(t("qOf"),{n:step+1})}</div>
+      <div class="bar"><i style="width:${(step/8)*100}%"></i></div>
+      <div class="q">${D[1]}</div>
+      ${opts.map((o,i)=>`<button class="opt" data-a="${i}">${o}</button>`).join("")}
+      <button class="link" data-back>${t("back")}</button></div>`;
+    el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>answer(+b.dataset.a));
+    el.querySelector("[data-back]").onclick=()=>{step--;renderCheck()};
+  } else if(saved){ renderResult(el,saved.a) }
+  else{
+    const ic=d=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+    el.innerHTML=`<div class="card hero"><span class="eyebrow">${t("tag")}</span>
+      <h1>${t("introT")}</h1><p class="lead">${t("introP")}</p>
+      <button class="btn cta" id="go">${t("start")}${ic('<path d="M5 12h14M13 6l6 6-6 6"/>')}</button>
+      <div class="facts"><span>${ic('<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>')}${t("f1")}</span>
+        <span>${ic('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')}${t("f2")}</span>
+        <span>${ic('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>')}${t("f3")}</span></div></div>`;
+    $("#go").onclick=()=>{step=0;ans=[];renderCheck()};
+  }
+}
+function answer(i){
+  ans[step]=i; step++;
+  if(step===8){ store("res",{a:ans,d:today()}); step=-1; renderToday() }
+  renderCheck(); scrollTo({top:0});
+}
+function renderResult(el,a){
+  const D=t("D"), good=a.filter(x=>x===0).length;
+  const order=a.map((c,i)=>[c,i]).filter(x=>x[0]>0).sort((x,y)=>y[0]-x[0]);
+  const support=a[1]===2||a[4]===2;
+  el.innerHTML=`<div class="card"><h2>${t("resT")}</h2>
+    <div class="big">${fill(t("resN"),{n:good})}</div>
+    <div class="dots" role="img" aria-label="${good}/8">${a.map(c=>`<i class="s${c}"></i>`).join("")}</div></div>
+  ${support?`<div class="card support"><h3>${t("supT")}</h3><p>${t("supP")}</p>
+    <a class="btn" href="tel:14416">${t("call")}</a><p class="mute" style="margin:10px 0 0">${t("emerg")}</p></div>`:""}
+  ${order.length?`<div class="section">${t("focus")}</div>`:""}
+  ${order.map(([c,i])=>`<div class="card flag f${c}"><h3>${D[i][0]}<span class="chip s${c}">${t("st"+c)}</span></h3><p style="margin:0">${D[i][2]}</p></div>`).join("")}
+  ${good?`<div class="card"><h3>${t("well")}</h3><div class="ok-list">${a.map((c,i)=>c===0?`<span>${D[i][0]}</span>`:"").join("")}</div></div>`:""}
+  <button class="btn" id="toPlan">${t("plan")}</button>
+  <button class="btn alt" id="toDoc">${t("find")}</button>
+  <div style="text-align:center"><button class="link" id="retake">${t("retake")}</button></div>`;
+  $("#toPlan").onclick=()=>show("today");
+  $("#toDoc").onclick=()=>{pendingSpec=(a[1]===2||a[4]===2)?6:0;show("doc")};
+  $("#retake").onclick=()=>{step=0;ans=[];renderCheck();scrollTo({top:0})};
+}
+
+/* ---------- Today ---------- */
+function tasks(){
+  const res=store("res"), D=t("D"), mine=[];
+  if(res) res.a.map((c,i)=>[c,i]).filter(x=>x[0]>0).sort((x,y)=>y[0]-x[0]).slice(0,3)
+    .forEach(([c,i])=>mine.push({id:"m"+i,txt:D[i][2]}));
+  return {mine,base:t("tasks").map((x,i)=>({id:"b"+i,txt:x}))};
+}
+function doneIds(){const d=store("done");return d&&d.d===today()?d.ids:[]}
+function renderToday(){
+  const el=$("#v-today"), {mine,base}=tasks(), all=[...mine,...base], done=doneIds();
+  const d=all.filter(x=>done.includes(x.id)).length, n=all.length;
+  const row=x=>`<label class="task"><input type="checkbox" data-id="${x.id}" ${done.includes(x.id)?"checked":""}><span>${x.txt}</span></label>`;
+  el.innerHTML=`<div class="card"><h2>${t("todayT")}</h2><p class="mute">${t("todayP")}</p>
+    <div><b>${fill(t("done"),{d,n})}</b></div>
+    <div class="bar"><i style="width:${n?d/n*100:0}%"></i></div>${d===n?`<p><b>${t("allDone")}</b></p>`:""}</div>
+    ${mine.length?`<div class="card"><h3>${t("mine")}</h3>${mine.map(row).join("")}</div>`:""}
+    <div class="card"><h3>${t("base")}</h3>${base.map(row).join("")}</div>
+    <button class="btn alt" id="toDoc2">${t("find")}</button>
+    <div style="text-align:center"><button class="link" id="clr">${t("reset")}</button></div>`;
+  el.querySelectorAll("input[data-id]").forEach(c=>c.onchange=()=>{
+    const ids=[...el.querySelectorAll("input:checked")].map(x=>x.dataset.id);
+    store("done",{d:today(),ids}); renderToday();
+  });
+  $("#toDoc2").onclick=()=>show("doc");
+  $("#clr").onclick=()=>{store("done",{d:today(),ids:[]});renderToday()};
+}
+
+/* ---------- Doctor ---------- */
+function renderDoc(){
+  const el=$("#v-doc");
+  if(pendingSpec!==null){draft.sp=pendingSpec;pendingSpec=null}
+  const specs=t("specs"), sel=draft.sp;
+  el.innerHTML=`<div class="card"><h2>${t("docT")}</h2><p class="mute">${t("docP")}</p>
+    <form id="df" novalidate>
+      <label class="f" id="sp-l" for="sp-b">${t("spec")}</label>
+      <div class="dd">
+        <input type="hidden" id="sp" value="${sel}">
+        <button type="button" class="dd-btn" id="sp-b" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sp-l sp-t">
+          <span id="sp-t">${specs[sel]}</span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+        </button>
+        <ul class="dd-list" id="sp-ul" role="listbox" aria-labelledby="sp-l" tabindex="-1" hidden>
+          ${specs.map((x,i)=>`<li role="option" id="sp-o${i}" data-i="${i}" aria-selected="${i===sel}">${x}</li>`).join("")}
+        </ul>
+      </div>
+      <label class="f" for="ct">${t("city")}</label>
+      <input type="text" id="ct" placeholder="${t("cityPh")}" autocomplete="address-level2" value="${draft.ct.replace(/"/g,"&quot;")}">
+      <label class="f" for="pc">${t("pin")}</label>
+      <input type="text" id="pc" inputmode="numeric" maxlength="6" autocomplete="postal-code" value="${draft.pc.replace(/"/g,"&quot;")}">
+      <p class="mute" id="err" style="color:var(--care);margin:6px 0 0" role="alert"></p>
+      <button class="btn" data-w="maps" type="submit">${t("maps")}</button>
+      <button class="btn alt" data-w="goog" type="button">${t("goog")}</button>
+    </form><p class="mute" style="margin-top:14px">${t("docNote")}</p></div>`;
+
+  /* custom dropdown */
+  const btn=$("#sp-b"), ul=$("#sp-ul"), opts=[...ul.children]; let act=sel, typed="", typedT;
+  const setAct=i=>{act=i;opts.forEach((o,j)=>o.classList.toggle("act",j===i));btn.setAttribute("aria-activedescendant","sp-o"+i);opts[i].scrollIntoView({block:"nearest"})};
+  const open=()=>{
+    ul.hidden=false; btn.setAttribute("aria-expanded","true");
+    const r=btn.getBoundingClientRect(), navH=76;
+    const below=innerHeight-r.bottom-navH, above=r.top-80;
+    ul.classList.toggle("up",below<260&&above>below);
+    setAct(+$("#sp").value);
+  };
+  const close=()=>{ul.hidden=true;btn.setAttribute("aria-expanded","false");btn.removeAttribute("aria-activedescendant")};
+  const pick=i=>{
+    $("#sp").value=i; draft.sp=i; docDirty=true; $("#sp-t").textContent=specs[i];
+    opts.forEach((o,j)=>o.setAttribute("aria-selected",j===i)); close(); btn.focus();
+  };
+  btn.onclick=()=>ul.hidden?open():close();
+  opts.forEach((o,i)=>{o.onmousedown=e=>e.preventDefault();o.onclick=()=>pick(i);o.onmousemove=()=>{if(act!==i)setAct(i)}});
+  btn.onkeydown=e=>{
+    const isOpen=!ul.hidden, k=e.key;
+    if(k==="ArrowDown"||k==="ArrowUp"){e.preventDefault();if(!isOpen)return open();setAct(Math.max(0,Math.min(opts.length-1,act+(k==="ArrowDown"?1:-1))))}
+    else if(k==="Home"&&isOpen){e.preventDefault();setAct(0)}
+    else if(k==="End"&&isOpen){e.preventDefault();setAct(opts.length-1)}
+    else if(k==="Enter"||k===" "){if(isOpen){e.preventDefault();pick(act)}else if(k===" "){e.preventDefault();open()}}
+    else if(k==="Escape"&&isOpen){e.preventDefault();close()}
+    else if(k==="Tab"&&isOpen){close()}
+    else if(k.length===1&&!e.ctrlKey&&!e.metaKey){
+      typed+=k.toLowerCase(); clearTimeout(typedT); typedT=setTimeout(()=>typed="",600);
+      const m=specs.findIndex(x=>x.toLowerCase().startsWith(typed));
+      if(m>-1){if(isOpen)setAct(m);else pick(m)}
+    }
+  };
+
+  $("#ct").oninput=e=>{draft.ct=e.target.value;docDirty=true};
+  $("#pc").oninput=e=>{draft.pc=e.target.value;docDirty=true};
+  const go=w=>{
+    const c=$("#ct").value.trim(), p=$("#pc").value.trim();
+    if(p&&!/^\d{6}$/.test(p)){$("#err").textContent=t("pinErr");return}
+    $("#err").textContent=""; store("city",c); store("pin",p); docDirty=false;
+    const q=SPEC_Q[+$("#sp").value]+" doctor "+(c||p?"near "+[c,p].filter(Boolean).join(" "):"near me");
+    window.open(w==="maps"?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q):"https://www.google.com/search?q="+encodeURIComponent(q),"_blank","noopener");
+  };
+  $("#df").onsubmit=e=>{e.preventDefault();go("maps")};
+  el.querySelector("[data-w=goog]").onclick=()=>go("goog");
+}
+document.addEventListener("click",e=>{
+  const ul=document.getElementById("sp-ul");
+  if(ul&&!ul.hidden&&!e.target.closest(".dd")){ul.hidden=true;document.getElementById("sp-b").setAttribute("aria-expanded","false")}
+});
+
+/* ---------- Unsaved-progress warning on tab close / reload ---------- */
+window.addEventListener("beforeunload",e=>{
+  const checkInProgress=step>=0;
+  if(checkInProgress||docDirty){e.preventDefault();e.returnValue=""}
+});
+
+/* ---------- Shell ---------- */
+const ORDER=["check","today","doc"], reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let cur=null, tok=0;
+function moveInd(instant){
+  const b=document.querySelector("nav button[aria-selected=true]"), i=document.querySelector("nav .ind");
+  if(!b)return;
+  if(instant){i.classList.add("noanim")}
+  i.style.width=b.offsetWidth+"px"; i.style.transform="translateX("+b.offsetLeft+"px)";
+  if(instant){void i.offsetWidth;i.classList.remove("noanim")}
+}
+function moveThumb(instant){
+  const b=document.querySelector(".langs button[aria-pressed=true]"), th=document.querySelector(".langs .thumb");
+  if(!b)return;
+  if(instant)th.classList.add("noanim");
+  th.style.width=b.offsetWidth+"px"; th.style.transform="translateX("+b.offsetLeft+"px)";
+  if(instant){void th.offsetWidth;th.classList.remove("noanim")}
+}
+function render(name){
+  if(name==="check")renderCheck(); if(name==="today")renderToday(); if(name==="doc")renderDoc();
+}
+function show(name){
+  const my=++tok, prev=cur, same=prev===name; tab=name;
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===name));
+  moveInd(prev===null);
+  const finish=()=>{
+    if(my!==tok)return;
+    ORDER.forEach(k=>{const e=$("#v-"+k);e.hidden=k!==name;e.classList.remove("leave","enter-l","enter-r")});
+    render(name); scrollTo({top:0}); cur=name;
+    if(!same&&prev!==null&&!reduce){
+      const sec=$("#v-"+name); void sec.offsetWidth;
+      sec.classList.add(ORDER.indexOf(name)>ORDER.indexOf(prev)?"enter-r":"enter-l");
+    }
+  };
+  if(prev!==null&&!same&&!reduce){$("#v-"+prev).classList.add("leave");setTimeout(finish,140)}
+  else finish();
+}
+function setLang(l,first){
+  if(!first&&l===lang)return;
+  lang=l; store("lang",l); document.documentElement.lang=l;
+  document.querySelectorAll(".langs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
+  moveThumb(first);
+  const apply=()=>{
+    document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));
+    show(tab);
+    requestAnimationFrame(()=>document.body.classList.remove("swapping"));
+  };
+  if(first||reduce)apply();
+  else{document.body.classList.add("swapping");setTimeout(apply,150)}
+}
+document.querySelectorAll(".langs button").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{if(b.dataset.tab!==tab)show(b.dataset.tab)});
+addEventListener("resize",()=>{moveInd(true);moveThumb(true)});
+addEventListener("load",()=>{moveInd(true);moveThumb(true)});
+setLang(lang,true);
 </script>
-</body></html>
+</body>
+</html>
